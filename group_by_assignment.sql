@@ -1,0 +1,260 @@
+use hr ;
+use northwind;
+
+
+-- 1. write a SQL query to calculate the total purchase amount of all orders. Return total purchase amount. 
+select sum(unit_price*quantity) as total_purchase_amount
+from order_details;
+
+
+-- 2. write a SQL query to calculate the average purchase amount of all orders. Return average purchase amount. 
+select avg(unit_price*quantity) as avg_purchase_amount
+from order_details; 
+
+
+-- 3.  write a SQL query that counts the number of unique salespeople. Return number of salespeople.
+select salespeople,count(salepeople) as num_of_salespeople
+from table_name_sales
+group by salespeople;
+
+
+-- 4. write a SQL query to count the number of customers. Return number of customers.   
+select customer_id,count(customer_id) as num_of_customers
+from customers
+group by customer_id;
+
+use northwind;
+-- 5. write a SQL query to determine the number of customers who received at least one grade for their activity.
+select count(distinct customer_id) as num_of_customers
+from customers
+where count(distinct customer_id) is not null;
+
+
+-- 6. write a SQL query to find the maximum purchase amount. 
+select unit_price,max(unit_price * quantity) as max_purchase_amt
+from order_details
+group by unit_price;
+
+
+-- 7. write a SQL query to find the minimum purchase amount 
+select unit_price,min(unit_price * quantity) as min_purchase_amt
+from order_details
+group by unit_price;
+
+
+
+-- 8. write a SQL query to find the highest grade of the customers in each city. Return city, maximum grade. 
+select city,count(distinct city) as max_grade
+from customers
+group by city 
+order by max_grade desc ;
+
+-- 9. write a SQL query to find the highest purchase amount ordered by each customer. Return customer ID, maximum purchase amount.  
+select customer_id,max(quantity*unit_price) as max_prchse_amt
+from order_details od 
+inner join orders on orders.order_id= od.order_id
+group by customer_id ;
+
+
+-- 10. write a SQL query to find the highest purchase amount ordered by each customer on a particular date. Return, order date and highest purchase amount. 
+select order_date,max(unit_price * quantity) as highest_purchase_amount
+from order_details od
+inner join orders on orders.order_id= od.order_id
+group by order_date;
+
+
+-- 11. write a SQL query to determine the highest purchase amount made by each salesperson on '2012-08-17'. Return salesperson ID, purchase amount  
+SELECT salesperson_id, MAX(purchase_amount) AS highest_purchase
+FROM Sales
+WHERE purchase_date = '2012-08-17'
+GROUP BY salesperson_id;
+
+
+-- 12. write a SQL query to find the highest order (purchase) amount by each customer on a 
+-- particular order date. Filter the result by highest order (purchase) amount above 2000.00. 
+-- Return customer id, order date and maximum purchase amount. 
+select customer_id, order_date, max(quantity*unit_price)  as max_purchase_amt
+from order_details od
+inner join orders on od.order_id= orders.order_id
+group by 1,2
+having max(quantity*unit_price)  >= 2000.00 ; 
+
+
+
+-- 13.  write a SQL query to find the maximum order (purchase) amount in the range 2000 - 
+-- 6000 (Begin and end values are included.) by combination of each customer and order 
+-- date. Return customer id, order date and maximum purchase amount. 
+select customer_id , order_date, max(quantity*unit_price) as max_purchase_amt
+from order_details od
+inner join orders on od.order_id= orders.order_id
+group by customer_id,order_date
+having max_purchase_amt between 2000 and 6000;
+
+
+-- 14. write a SQL query to find the maximum order (purchase) amount based on the 
+-- combination of each customer and order date. Filter the rows for maximum order 
+-- (purchase) amount is either 2000, 3000, 5760, 6000. Return customer id, order date and 
+-- maximum purchase amount. 
+select customer_id,order_date,max(quantity*unit_price) as max_purchase_amt
+from order_details od
+join orders on orders.order_id = od.order_id
+group by customer_id,order_date
+having max_purchase_amt in (2000,3000,5760,6000);
+
+
+
+
+-- 15.  write a SQL query to determine the maximum order amount for each customer. The 
+-- customer ID should be in the range 3002 and 3007(Begin and end values are included.). 
+-- Return customer id and maximum purchase amount.
+select * from orders; 
+select customer_id,max(quantity*unit_price) as max_purcase_amt
+from orders o
+join order_details od on od.order_id = o.order_id
+where customer_id between 3002 and 3007
+group by customer_id;
+
+
+-- 16. write a SQL query to find the maximum order (purchase) amount for each customer. The 
+-- customer ID should be in the range 3002 and 3007(Begin and end values are included.). 
+-- Filter the rows for maximum order (purchase) amount is higher than 1000. Return 
+-- customer id and maximum purchase amount. 
+select customer_id,max(quantity*unit_price) as max_purcase_amt
+from orders o
+join order_details od on od.order_id = o.order_id
+where customer_id between 3002 and 3007
+group by customer_id
+having max_purcase_amt > 1000;
+
+
+-- 17. write a SQL query to determine the maximum order (purchase) amount generated by 
+-- each salesperson. Filter the rows for the salesperson ID is in the range 5003 and 5008 
+-- (Begin and end values are included.). Return salesperson id and maximum purchase 
+-- amount. 
+SELECT salesperson_id, MAX(purchase_amount) AS max_purchase
+FROM Sales
+WHERE salesperson_id BETWEEN 5003 AND 5008
+GROUP BY salesperson_id;
+
+-- 18. write a SQL query to count all the orders generated on '2012-08-17'. Return number of 
+-- orders. 
+select order_date,count(order_id) as no_of_orders
+from orders
+where order_date = '2012-08-17'; 
+
+
+-- 19. write a SQL query to count the number of salespeople in a city. Return number of 
+-- salespeople. 
+select city,count(sales_id) as no_of_salesman
+from sales_table
+group by city ;
+
+
+-- 20. write a SQL query to count the number of orders based on the combination of each order 
+-- date and salesperson. Return order date, salesperson id. 
+select order_date,salesman_id,count(order_id) as no_of_order
+from orders
+group by order_date,salesman_id;
+
+
+-- 21. write a SQL query to calculate the average product price. Return average product price. 
+select order_id,avg(unit_price) as average_pr_price
+from order_details
+group by order_id;
+
+-- 22. write a SQL query to count the number of products whose price are higher than or equal 
+-- to 350. Return number of products. 
+select count(product_id) as no_of_product
+from order_details
+where unit_price >= 350;
+
+
+-- 23. write a SQL query to compute the average price for unique companies. Return average 
+-- price and company id. 
+select company_id,avg(unit_price) as avg_price
+from order_details
+group by company_id;
+
+-- 24. write a SQL query to compute the sum of the allotment amount of all departments. 
+-- Return sum of the allotment amount. 
+use hr;
+select department_id,count(department_id),sum(salary)
+from employees
+group by department_id
+order by sum(salary) desc ;
+
+
+-- 25. write a SQL query to count the number of employees in each department. Return 
+-- department code and number of employees. 
+select department_id,count(employee_id) as no_emp
+from employees
+group by department_id;
+
+
+-- 26. Find the average salary for each job title in the company. 
+select job_title,avg((min_salary+max_salary)/2) as avg_sal
+from jobs
+group by job_title;
+
+
+
+-- 27. List the number of employees in each department. 
+select department_id,count(employee_id)as no_emp
+from employees
+group by department_id
+order by no_emp desc;
+
+-- 28. Determine the total salary expenditure by each department. 
+select department_id,sum(salary) as total_salary
+from employees
+group by department_id;
+
+-- 29. Compute the maximum salary in each location. 
+select l.location_id, max(salary)
+from employees e
+join departments d on d.department_id = e.department_id
+join locations l on l.location_id = d.location_id
+join countries c on c.country_id = l.country_id
+group by l.location_id;
+
+-- 30. Calculate the total number of employees in each location 
+select c.country_name, count(employee_id)
+from employees e
+join departments d on d.department_id = e.department_id
+join locations l on l.location_id = d.location_id
+join countries c on c.country_id = l.country_id
+group by c.country_name;
+
+
+-- 31. Display the job titles of employees who work in the same department. 
+select j.job_title,count(department_id) as dept
+from employees e 
+join jobs j on j.job_id = e.job_id
+group by j.job_title
+order by dept desc;
+
+-- 32. Determine the number of employees in each job title 
+select j.job_title, count(employee_id)
+from employees e
+join jobs j on j.job_id = e.job_id
+group by j.job_title;
+
+-- 33. Compute the average salary for employees in each department. 
+select department_id, avg(salary)
+from employees 
+group by department_id;
+
+-- 34. Find the department names and locations with more than five employees. 
+select d.department_name ,l.location_id,count(e.employee_id) as no_emp
+from employees e 
+join departments d on d.department_id = e.department_id
+join locations l on l.location_id = d.location_id
+group by d.department_name,l.location_id
+having no_emp > 5 ;
+
+-- 35. Calculate the total salary for each department and location. 
+select d.department_name ,l.location_id,sum(e.salary) as total_salary
+from employees e 
+join departments d on d.department_id = e.department_id
+join locations l on l.location_id = d.location_id
+group by d.department_name,l.location_id;
